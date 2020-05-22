@@ -42,7 +42,6 @@ module.exports = (
         chunkFilename: dev
           ? "static/chunks/[name].chunk.css"
           : "static/chunks/[name].[contenthash:8].chunk.css",
-        hot: dev,
       })
     );
     extractCssInitialized = true;
@@ -91,7 +90,7 @@ module.exports = (
         modules: cssModules,
         sourceMap: dev,
         importLoaders: loaders.length + (postcssLoader ? 1 : 0),
-        exportOnlyLocals: isServer,
+        onlyLocals: isServer,
       },
       cssLoaderOptions
     ),
