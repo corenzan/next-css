@@ -1,9 +1,12 @@
 {
-  "name": "@zeit/next-css",
-  "version": "0.2.1-canary.4",
+  "name": "@crz/next-css",
+  "version": "0.2.2-canary",
   "main": "index.js",
   "license": "MIT",
-  "repository": "zeit/next-plugins",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/corenzan/next-css.git"
+  },
   "dependencies": {
     "css-loader": "^2.1.0",
     "extract-css-chunks-webpack-plugin": "^3.3.2",
@@ -14,6 +17,5 @@
   },
   "devDependencies": {
     "webpack": "^4.29.5"
-  },
-  "gitHead": "31e8978d07e5468f760a222a72d1e8f3f457e6ff"
+  }
 }
