@@ -1,9 +1,9 @@
-const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
-const findUp = require('find-up')
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const ExtractCssChunks = require("extract-css-chunks-webpack-plugin");
+const findUp = require("find-up");
+const OptimizeCssAssetsWebpackPlugin = require("optimize-css-assets-webpack-plugin");
 
-const fileExtensions = new Set()
-let extractCssInitialized = false
+const fileExtensions = new Set();
+let extractCssInitialized = false;
 
 module.exports = (
   config,
@@ -14,21 +14,21 @@ module.exports = (
     dev,
     isServer,
     postcssLoaderOptions = {},
-    loaders = []
+    loaders = [],
   }
 ) => {
   // We have to keep a list of extensions for the splitchunk config
   for (const extension of extensions) {
-    fileExtensions.add(extension)
+    fileExtensions.add(extension);
   }
 
   if (!isServer) {
     config.optimization.splitChunks.cacheGroups.styles = {
-      name: 'styles',
-      test: new RegExp(`\\.+(${[...fileExtensions].join('|')})$`),
-      chunks: 'all',
-      enforce: true
-    }
+      name: "styles",
+      test: new RegExp(`\\.+(${[...fileExtensions].join("|")})$`),
+      chunks: "all",
+      enforce: true,
+    };
   }
 
   if (!isServer && !extractCssInitialized) {
@@ -37,35 +37,35 @@ module.exports = (
         // Options similar to the same options in webpackOptions.output
         // both options are optional
         filename: dev
-          ? 'static/chunks/[name].css'
-          : 'static/chunks/[name].[contenthash:8].css',
+          ? "static/chunks/[name].css"
+          : "static/chunks/[name].[contenthash:8].css",
         chunkFilename: dev
-          ? 'static/chunks/[name].chunk.css'
-          : 'static/chunks/[name].[contenthash:8].chunk.css',
-        hot: dev
+          ? "static/chunks/[name].chunk.css"
+          : "static/chunks/[name].[contenthash:8].chunk.css",
+        hot: dev,
       })
-    )
-    extractCssInitialized = true
+    );
+    extractCssInitialized = true;
   }
 
   if (!dev) {
     if (!Array.isArray(config.optimization.minimizer)) {
-      config.optimization.minimizer = []
+      config.optimization.minimizer = [];
     }
 
     config.optimization.minimizer.push(
       new OptimizeCssAssetsWebpackPlugin({
         cssProcessorOptions: {
-          discardComments: { removeAll: true }
-        }
+          discardComments: { removeAll: true },
+        },
       })
-    )
+    );
   }
 
-  const postcssConfigPath = findUp.sync('postcss.config.js', {
-    cwd: config.context
-  })
-  let postcssLoader
+  const postcssConfigPath = findUp.sync("postcss.config.js", {
+    cwd: config.context,
+  });
+  let postcssLoader;
 
   if (postcssConfigPath) {
     // Copy the postcss-loader config options first.
@@ -73,44 +73,44 @@ module.exports = (
       {},
       postcssLoaderOptions.config,
       { path: postcssConfigPath }
-    )
+    );
 
     postcssLoader = {
-      loader: 'postcss-loader',
+      loader: "postcss-loader",
       options: Object.assign({}, postcssLoaderOptions, {
-        config: postcssOptionsConfig
-      })
-    }
+        config: postcssOptionsConfig,
+      }),
+    };
   }
 
   const cssLoader = {
-    loader: 'css-loader',
+    loader: "css-loader",
     options: Object.assign(
       {},
       {
         modules: cssModules,
         sourceMap: dev,
         importLoaders: loaders.length + (postcssLoader ? 1 : 0),
-        exportOnlyLocals: isServer
+        exportOnlyLocals: isServer,
       },
       cssLoaderOptions
-    )
-  }
+    ),
+  };
 
   // When not using css modules we don't transpile on the server
   if (isServer && !cssLoader.options.modules) {
-    return ['ignore-loader']
+    return ["ignore-loader"];
   }
 
   // When on the server and using css modules we transpile the css
   if (isServer && cssLoader.options.modules) {
-    return [cssLoader, postcssLoader, ...loaders].filter(Boolean)
+    return [cssLoader, postcssLoader, ...loaders].filter(Boolean);
   }
 
   return [
     !isServer && ExtractCssChunks.loader,
     cssLoader,
     postcssLoader,
-    ...loaders
-  ].filter(Boolean)
-}
+    ...loaders,
+  ].filter(Boolean);
+};
