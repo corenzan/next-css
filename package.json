@@ -1,8 +1,10 @@
 {
   "name": "@crz/next-css",
   "version": "1.0.2",
-  "main": "index.js",
+  "description": "Fork of the official next-css plugin.",
   "license": "MIT",
+  "author": "Arthur <arthur@corenzan.com>",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/corenzan/next-css.git"
