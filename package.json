@@ -1,6 +1,6 @@
 {
   "name": "@crz/next-css",
-  "version": "0.2.2-canary",
+  "version": "1.0.2",
   "main": "index.js",
   "license": "MIT",
   "repository": {
